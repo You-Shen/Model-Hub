@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatWithAIs V1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-dark: #7c3aed;
+            --secondary: #3b82f6;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .bg-grid-pattern {
+            background-image:
+                    linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .carousel-container {
+            position: relative;
+            max-width: 1200px;
+            margin: 2rem auto;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .carousel {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .carousel-item {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .carousel-item.active {
+            opacity: 1;
+        }
+
+        .carousel-item:nth-child(1) {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+        }
+
+        .carousel-item:nth-child(2) {
+            background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+            color: white;
+        }
+
+        .carousel-item:nth-child(3) {
+            background: linear-gradient(135deg, #f9fafb 0%, #e5e7eb 100%);
+            color: #111827;
+        }
+
+        .carousel-caption {
+            max-width: 800px;
+            font-size: 1.5rem;
+            line-height: 1.5;
+            margin-top: 1.5rem;
+        }
+
+        .carousel-control {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            border: none;
+            padding: 1rem;
+            cursor: pointer;
+            font-size: 1.5rem;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .carousel-control:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .carousel-control.prev {
+            left: 2rem;
+        }
+
+        .carousel-control.next {
+            right: 2rem;
+        }
+
+        .dots {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .dots span {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dots span.active {
+            background: white;
+            transform: scale(1.2);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-grid-pattern">
+<div class="home">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white/90 shadow-sm backdrop-blur-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-robot text-purple-600 text-xl"></i>
+                <span class="font-bold text-gray-800 text-xl">ChatWithAIs <span class="gradient-text">V1</span></span>
+                <span class="hidden md:inline text-sm text-gray-500 ml-2">一站式大语言模型访问平台</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="/login" class="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium hover:from-blue-600 hover:to-purple-700 transition-all duration-300 shadow-md hover:shadow-lg">
+                    登录
+                </a>
+                <a href="/register" class="ml-4 px-4 py-2 rounded-lg border-2 border-purple-600 text-purple-600 font-medium hover:bg-purple-50 transition-all duration-300">
+                    注册
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容区域 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 轮播图部分 -->
+        <div class="carousel-container">
+            <div class="carousel">
+                <div class="carousel-item active">
+                    <h2 class="text-4xl font-bold">探索AI的无限可能</h2>
+                    <div class="carousel-caption">
+                        接入全球领先的大语言模型，体验智能对话的未来
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <h2 class="text-4xl font-bold">多模型自由切换</h2>
+                    <div class="carousel-caption">
+                        一个平台，多种AI模型，满足您的不同需求
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <h2 class="text-4xl font-bold">开发者友好</h2>
+                    <div class="carousel-caption">
+                        提供完善的API接口，轻松集成到您的应用中
+                    </div>
+                </div>
+                <button class="carousel-control prev">&#10094;</button>
+                <button class="carousel-control next">&#10095;</button>
+            </div>
+
+            <!-- 指示点 -->
+            <div class="dots">
+                <span class="active"></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <!-- 特性展示 -->
+        <section class="mt-16">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">核心特性</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="feature-card">
+                    <div class="text-purple-600 text-4xl mb-4">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">快速响应</h3>
+                    <p class="text-gray-600">优化的AI模型响应机制，确保您获得最快的回答</p>
+                </div>
+                <div class="feature-card">
+                    <div class="text-blue-500 text-4xl mb-4">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">安全可靠</h3>
+                    <p class="text-gray-600">端到端加密，保护您的对话隐私和数据安全</p>
+                </div>
+                <div class="feature-card">
+                    <div class="text-green-500 text-4xl mb-4">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">高度可定制</h3>
+                    <p class="text-gray-600">个性化设置，打造专属您的AI助手体验</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 模型展示 -->
+        <section class="mt-20 bg-white rounded-2xl p-8 shadow-lg">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">支持的AI模型</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="flex flex-col items-center p-4 hover:bg-gray-50 rounded-xl transition">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-3">
+                        <i class="fas fa-brain text-purple-600 text-2xl"></i>
+                    </div>
+                    <span class="font-medium">GPT-4</span>
+                </div>
+                <div class="flex flex-col items-center p-4 hover:bg-gray-50 rounded-xl transition">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-3">
+                        <i class="fas fa-robot text-blue-600 text-2xl"></i>
+                    </div>
+                    <span class="font-medium">Qwen</span>
+                </div>
+                <div class="flex flex-col items-center p-4 hover:bg-gray-50 rounded-xl transition">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-3">
+                        <i class="fas fa-comment-dots text-green-600 text-2xl"></i>
+                    </div>
+                    <span class="font-medium">文心</span>
+                </div>
+                <div class="flex flex-col items-center p-4 hover:bg-gray-50 rounded-xl transition">
+                    <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mb-3">
+                        <i class="fas fa-lightbulb text-yellow-600 text-2xl"></i>
+                    </div>
+                    <span class="font-medium">其他</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer bg-white/80 backdrop-blur-md mt-12">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center space-x-2 mb-4 md:mb-0">
+                    <i class="fas fa-robot text-purple-600 text-xl"></i>
+                    <span class="font-bold text-gray-800">ChatWithAIs</span>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-500 hover:text-purple-600 transition">关于我们</a>
+                    <a href="#" class="text-gray-500 hover:text-purple-600 transition">隐私政策</a>
+                    <a href="#" class="text-gray-500 hover:text-purple-600 transition">服务条款</a>
+                    <a href="#" class="text-gray-500 hover:text-purple-600 transition">联系我们</a>
+                </div>
+            </div>
+            <div class="mt-6 text-center text-sm text-gray-500">
+                ©2024 Created by HIT-ChatWithAIs team. All rights reserved.
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script>
+    // 轮播图逻辑
+    document.addEventListener('DOMContentLoaded', function() {
+        const carouselItems = document.querySelectorAll('.carousel-item');
+        const dots = document.querySelectorAll('.dots span');
+        let currentIndex = 0;
+
+        function showSlide(index) {
+            carouselItems.forEach(item => item.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+
+            carouselItems[index].classList.add('active');
+            dots[index].classList.add('active');
+            currentIndex = index;
+        }
+
+        function nextSlide() {
+            let newIndex = (currentIndex + 1) % carouselItems.length;
+            showSlide(newIndex);
+        }
+
+        function prevSlide() {
+            let newIndex = (currentIndex - 1 + carouselItems.length) % carouselItems.length;
+            showSlide(newIndex);
+        }
+
+        // 自动轮播
+        let interval = setInterval(nextSlide, 5000);
+
+        // 点击指示点切换
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                clearInterval(interval);
+                showSlide(index);
+                interval = setInterval(nextSlide, 5000);
+            });
+        });
+
+        // 左右箭头按钮
+        document.querySelector('.carousel-control.next').addEventListener('click', () => {
+            clearInterval(interval);
+            nextSlide();
+            interval = setInterval(nextSlide, 5000);
+        });
+
+        document.querySelector('.carousel-control.prev').addEventListener('click', () => {
+            clearInterval(interval);
+            prevSlide();
+            interval = setInterval(nextSlide, 5000);
+        });
+
+        // 鼠标悬停暂停轮播
+        const carousel = document.querySelector('.carousel');
+        carousel.addEventListener('mouseenter', () => clearInterval(interval));
+        carousel.addEventListener('mouseleave', () => interval = setInterval(nextSlide, 5000));
+    });
+</script>
+</body>
+</html>
