@@ -1,0 +1,20 @@
+SECRET_KEY = 'your_secret_key'
+SQLALCHEMY_DATABASE_URI = 'sqlite:///site.db'
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+MAIL_SERVER = 'smtp.163.com'
+# MAIL_PORT = '25'
+MAIL_PORT = 465
+# MAIL_USE_TLS = True
+MAIL_USE_SSL = True
+MAIL_USERNAME = 'hitmodelhub@163.com'
+MAIL_PASSWORD = 'UXRxcS7JLXKZr3G2'
+#UXRxcS7JLXKZr3G2
+MAIL_DEFAULT_SENDER = 'hitmodelhub@163.com'
+FLASK_MAIL_SUBJECT_PREFIX = '[ModelHubs AuthCode]'
+FLASK_MAIL_SENDER = 'HIT ModelHubs team <hitmodelhub@163.com>'
+# Redis配置
+REDIS_HOST = '127.0.0.1'
+REDIS_PORT = 6379
+REDIS_DB = 1
+#bce-v3/ALTAK-Hw0OasacY6PSaNyPRF3nM/3494f28aa503af8c7e1d846d83b82609a4f95a85
